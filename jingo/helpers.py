@@ -1,6 +1,7 @@
 from django.utils.translation import ugettext as _
 from django.template.defaulttags import CsrfTokenNode
 from django.utils.encoding import smart_unicode
+from django.core.urlresolvers import reverse
 
 import jinja2
 
@@ -67,9 +68,12 @@ def class_selected(a, b):
     """Return ``'class="selected"'`` if ``a == b``."""
     return ifeq(a, b, 'class="selected"')
 
-
 @register.filter
 def field_attrs(field_inst, **kwargs):
     """Adds html attributes to django form fields"""
     field_inst.field.widget.attrs.update(kwargs)
     return field_inst
+
+@register.function
+def url(viewname, *args, **kwargs):
+    return reverse(viewname, args=args, kwargs=kwargs)
